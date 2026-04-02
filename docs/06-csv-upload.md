@@ -87,6 +87,7 @@ function parseCsv(text: string): Record<string, string>[] {
 
 変換後のイメージ：
 
+**members.csv の場合**
 ```ts
 // 変換前（文字列）
 "member_name\n田中花子\n鈴木太郎"
@@ -95,6 +96,18 @@ function parseCsv(text: string): Record<string, string>[] {
 [
   { member_name: "田中花子" },
   { member_name: "鈴木太郎" },
+]
+```
+
+**numbers.csv の場合**（カラムが複数あっても同じ仕組みで変換される）
+```ts
+// 変換前（文字列）
+"number_name,choreographer,member_name\nナンバーA,田中花子,田中花子\nナンバーA,田中花子,鈴木太郎"
+
+// 変換後（オブジェクト配列）
+[
+  { number_name: "ナンバーA", choreographer: "田中花子", member_name: "田中花子" },
+  { number_name: "ナンバーA", choreographer: "田中花子", member_name: "鈴木太郎" },
 ]
 ```
 

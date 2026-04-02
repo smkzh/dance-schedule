@@ -22,6 +22,8 @@ export default function AdminUploadPage() {
   const [performanceName, setPerformanceName] = useState("");
   const [preview, setPreview] = useState<PreviewData | null>(null);
   const [error, setError] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveResult, setSaveResult] = useState<"success" | "error" | null>(null);
 
   async function handlePreview(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -44,10 +46,30 @@ export default function AdminUploadPage() {
     const membersText = await membersFile.text();
     const numbersText = await numbersFile.text();
 
+    setSaveResult(null);
     setPreview({
       members: parseCsv(membersText),
       numberMembers: parseCsv(numbersText),
     });
+  }
+
+  async function handleSave() {
+    if (!preview) return;
+    setIsSaving(true);
+    setSaveResult(null);
+
+    const res = await fetch("/api/upload", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        performanceName,
+        memberNames: preview.members.map((r) => r.member_name),
+        numberMembers: preview.numberMembers,
+      }),
+    });
+
+    setIsSaving(false);
+    setSaveResult(res.ok ? "success" : "error");
   }
 
   return (
@@ -152,9 +174,21 @@ export default function AdminUploadPage() {
             </table>
           </div>
 
-          <p className="text-sm text-gray-500">
-            ※ 次のステップでSupabaseへの保存機能を追加します
-          </p>
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={handleSave}
+              disabled={isSaving}
+              className="h-11 rounded-lg bg-black text-white font-medium hover:opacity-80 transition-opacity disabled:opacity-40"
+            >
+              {isSaving ? "保存中..." : "Supabaseに保存する"}
+            </button>
+            {saveResult === "success" && (
+              <p className="text-green-600 text-sm">保存しました</p>
+            )}
+            {saveResult === "error" && (
+              <p className="text-red-500 text-sm">保存に失敗しました</p>
+            )}
+          </div>
         </div>
       )}
 
