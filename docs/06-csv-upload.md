@@ -10,7 +10,7 @@
 ## 更新したファイル
 
 ```
-web/app/admin/upload/page.tsx  ← Client Component として全面更新
+app/admin/upload/page.tsx  ← Client Component として全面更新
 ```
 
 ---

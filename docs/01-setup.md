@@ -45,7 +45,7 @@ npm -v    # → 10.8.2
 `create-next-app` コマンドで雛形を自動生成した。
 
 ```bash
-npx create-next-app@latest /Users/kazuhasoma/flow-sche/dance-schedule/web \
+npx create-next-app@latest /Users/kazuhasoma/flow-sche/dance-schedule \
   --typescript \   # TypeScript を使う
   --tailwind \     # Tailwind CSS を使う
   --eslint \       # コードの品質チェックツールを入れる
@@ -54,9 +54,6 @@ npx create-next-app@latest /Users/kazuhasoma/flow-sche/dance-schedule/web \
   --import-alias "@/*" \  # import のパス省略設定
   --use-npm        # npm を使う
 ```
-
-ドキュメント（.md ファイル）と Next.js プロジェクトを分けるため、
-`web/` サブディレクトリに作成した。
 
 ### 3. ディレクトリ構成
 
@@ -67,21 +64,20 @@ dance-schedule/
 │   ├── design.md
 │   ├── implementation-plan.md
 │   └── 01-setup.md（このファイル）
-└── web/                     ← Next.js プロジェクト
-    ├── app/                 ← アプリの中心（ページをここに作る）
-    │   ├── page.tsx         ← / ホームページ
-    │   ├── layout.tsx       ← 全ページ共通レイアウト
-    │   └── globals.css      ← 全体 CSS
-    ├── public/              ← 画像などの静的ファイル
-    ├── package.json         ← 使用ライブラリの一覧
-    ├── tsconfig.json        ← TypeScript 設定
-    └── next.config.ts       ← Next.js 設定
+├── app/                     ← アプリの中心（ページをここに作る）
+│   ├── page.tsx             ← / ホームページ
+│   ├── layout.tsx           ← 全ページ共通レイアウト
+│   └── globals.css          ← 全体 CSS
+├── public/                  ← 画像などの静的ファイル
+├── package.json             ← 使用ライブラリの一覧
+├── tsconfig.json            ← TypeScript 設定
+└── next.config.ts           ← Next.js 設定
 ```
 
 ### 4. 開発サーバーの起動
 
 ```bash
-cd /Users/kazuhasoma/flow-sche/dance-schedule/web
+cd /Users/kazuhasoma/flow-sche/dance-schedule
 npm run dev
 ```
 

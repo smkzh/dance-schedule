@@ -44,22 +44,7 @@ git push origin main
 3. `dance-schedule` リポジトリを選択して **「Import」**
 4. 設定画面が開く
 
-### ルートディレクトリの設定（重要）
-
-このプロジェクトはリポジトリのルートではなく `web/` フォルダが Next.js のプロジェクト本体。
-
-設定画面の **「Root Directory」** に `web` と入力する。
-
-```
-dance-schedule/        ← リポジトリのルート
-├── docs/
-└── web/               ← ここを Root Directory に指定
-    ├── app/
-    ├── components/
-    └── package.json
-```
-
-Framework Preset は自動で **Next.js** が選ばれるはず。
+Framework Preset は自動で **Next.js** が選ばれるはず。**「Root Directory」** はデフォルト（リポジトリルート）のままで OK。
 
 ---
 
@@ -79,7 +64,7 @@ Framework Preset は自動で **Next.js** が選ばれるはず。
 3. 左メニュー「Project Settings」→「API」
 4. **Project URL** と **anon public** をコピー
 
-ローカルの `web/.env.local` に書いてある値と同じものを使う。
+ローカルの `.env.local` に書いてある値と同じものを使う。
 
 ---
 

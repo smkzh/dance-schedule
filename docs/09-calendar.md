@@ -10,7 +10,7 @@
 ## 作成・更新したファイル
 
 ```
-web/components/
+components/
 ├── Calendar.tsx      ← 新規: カレンダー表示・日付選択
 └── NameSelector.tsx  ← 更新: selectedDates 状態を追加・Calendar を組み込む
 ```

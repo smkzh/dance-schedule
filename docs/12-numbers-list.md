@@ -9,7 +9,7 @@
 ## 更新したファイル
 
 ```
-web/app/numbers/page.tsx  ← 更新: Supabaseからナンバー一覧を取得して表示
+app/numbers/page.tsx  ← 更新: Supabaseからナンバー一覧を取得して表示
 ```
 
 ---

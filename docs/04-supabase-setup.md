@@ -133,7 +133,7 @@ performances（公演）
 ### 2. テーブルを作成する
 
 1. 左メニューの「SQL Editor」を開く
-2. `web/supabase/schema.sql` の内容をコピーして貼り付ける
+2. `supabase/schema.sql` の内容をコピーして貼り付ける
 3. 「Run」ボタンをクリック
 4. 左メニューの「Table Editor」を開き、5つのテーブルが作成されていることを確認
 

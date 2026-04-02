@@ -10,7 +10,7 @@
 ## 作成したファイル
 
 ```
-web/app/
+app/
 ├── page.tsx                ← / ホーム（既存を書き換え）
 ├── submit/
 │   └── page.tsx            ← /submit 日程提出

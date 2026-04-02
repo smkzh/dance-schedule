@@ -10,7 +10,6 @@
 ## 作成・更新したファイル
 
 ```
-web/
 ├── components/
 │   └── NameSelector.tsx   ← 新規: 名前選択ドロップダウン（Client Component）
 └── app/submit/

@@ -9,7 +9,6 @@
 ## 作成・更新したファイル
 
 ```
-web/
 ├── lib/
 │   └── calculateCandidates.ts  ← 新規: 候補日計算ロジック
 └── app/numbers/[id]/

@@ -10,7 +10,7 @@
 ## 作成・更新したファイル
 
 ```
-web/components/
+components/
 ├── TimeSlotGrid.tsx  ← 新規: 時間スロットの表示・タップ操作
 ├── Calendar.tsx      ← 更新: props を activeDate/datesWithSlots/onSelectDate に変更
 └── NameSelector.tsx  ← 更新: availabilities 状態・rangeStart 状態・handleSlotTap を追加

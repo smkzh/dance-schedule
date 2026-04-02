@@ -10,7 +10,6 @@
 ## 作成・更新したファイル
 
 ```
-web/
 ├── app/api/submit/
 │   └── route.ts        ← 新規: 日程保存APIルート
 └── components/

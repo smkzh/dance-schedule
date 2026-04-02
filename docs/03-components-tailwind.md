@@ -10,7 +10,6 @@
 ## 作成・更新したファイル
 
 ```
-web/
 ├── components/
 │   └── LinkButton.tsx   ← 新規: 再利用できるリンクボタン部品
 └── app/
