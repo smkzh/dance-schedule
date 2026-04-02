@@ -2,6 +2,8 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import NameSelector from "@/components/NameSelector";
 
+export const dynamic = "force-dynamic";
+
 export default async function SubmitPage() {
   // アクティブな公演を取得
   const { data: performance } = await supabase

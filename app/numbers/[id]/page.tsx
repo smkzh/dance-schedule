@@ -2,6 +2,8 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { calculateCandidates } from "@/lib/calculateCandidates";
 
+export const dynamic = "force-dynamic";
+
 export default async function NumberDetailPage({
   params,
 }: {

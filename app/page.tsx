@@ -1,6 +1,8 @@
 import LinkButton from "@/components/LinkButton";
 import { supabase } from "@/lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const { data: performance } = await supabase
     .from("performances")

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 export default async function NumbersPage() {
   // アクティブな公演を取得
   const { data: performance } = await supabase
