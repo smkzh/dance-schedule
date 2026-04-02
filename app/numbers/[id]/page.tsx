@@ -36,7 +36,7 @@ export default async function NumberDetailPage({
 
   const candidates = calculateCandidates(
     availabilities ?? [],
-    number.number_members
+    number.number_members as any
   );
 
   const choreographers = number.number_members
