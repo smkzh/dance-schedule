@@ -85,7 +85,7 @@ cd /Users/kazuhasoma/flow-sche/dance-schedule/web
 npm run dev
 ```
 
-`http://localhost:3000` をブラウザで開くと Next.js のデフォルトページが表示される。
+`http://localhost:3005` をブラウザで開くと Next.js のデフォルトページが表示される。
 
 #### `npm run dev` が何をしているか
 - `package.json` の `scripts.dev` に書かれたコマンドを実行している
@@ -99,11 +99,11 @@ npm run dev
 Next.js では **`app/` フォルダの構造が URL に対応する**。
 
 ```
-app/page.tsx                → http://localhost:3000/
-app/submit/page.tsx         → http://localhost:3000/submit
-app/numbers/page.tsx        → http://localhost:3000/numbers
-app/numbers/[id]/page.tsx   → http://localhost:3000/numbers/123（動的）
-app/admin/upload/page.tsx   → http://localhost:3000/admin/upload
+app/page.tsx                → http://localhost:3005/
+app/submit/page.tsx         → http://localhost:3005/submit
+app/numbers/page.tsx        → http://localhost:3005/numbers
+app/numbers/[id]/page.tsx   → http://localhost:3005/numbers/123（動的）
+app/admin/upload/page.tsx   → http://localhost:3005/admin/upload
 ```
 
 フォルダを作って `page.tsx` を置くだけで新しいページができる。
@@ -113,4 +113,4 @@ app/admin/upload/page.tsx   → http://localhost:3000/admin/upload
 ## 完了の確認
 - [ ] `node -v` でバージョンが表示される
 - [ ] `npm run dev` で開発サーバーが起動する
-- [ ] `http://localhost:3000` でページが表示される
+- [ ] `http://localhost:3005` でページが表示される
