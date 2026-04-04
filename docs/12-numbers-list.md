@@ -96,6 +96,34 @@ const choreographers = number.number_members
 テンプレートリテラル（`` ` `` で囲む）を使って URL に id を埋め込む。
 タップするとそのナンバーの詳細ページに遷移する。
 
+### `<Link>` は Next.js のコンポーネント
+
+`next/link` からインポートする Next.js 専用のコンポーネント。HTML の `<a>` タグと同じ「クリックで別ページに遷移する」機能を持つ。
+
+`<Link>` にスタイルを当てることで「リンク機能を持つカード」という見た目になる。
+
+```tsx
+<Link
+  className="flex flex-col gap-1 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+>
+  <span className="font-medium">{number.name}</span>
+  <span className="text-sm text-gray-500">振付: ...</span>
+</Link>
+```
+
+| クラス | 意味 |
+|---|---|
+| `flex flex-col` | 縦並びの Flexbox |
+| `gap-1` | 子要素間の隙間（4px）|
+| `p-4` | 内側の余白（16px）|
+| `border border-gray-200` | 薄いグレーの枠線 |
+| `rounded-lg` | 角を丸くする |
+| `hover:bg-gray-50` | ホバー時に背景を薄いグレーにする |
+| `transition-colors` | 色の変化をなめらかにアニメーション |
+| `font-medium` | 文字を少し太くする |
+| `text-sm` | 文字を小さくする（14px）|
+| `text-gray-500` | 文字色をグレーにする |
+
 ---
 
 ## 完了の確認

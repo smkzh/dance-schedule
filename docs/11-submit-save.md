@@ -31,6 +31,30 @@
 
 ---
 
+## request.json() でリクエストの本文を読み取る
+
+```ts
+const body = await request.json();
+```
+
+フロントエンド（`NameSelector.tsx`）は `fetch` でデータを送信している。
+
+```ts
+// NameSelector.tsx（送信側）
+fetch("/api/submit", {
+  method: "POST",
+  body: JSON.stringify({ memberId, availabilities }),
+})
+```
+
+`JSON.stringify(...)` によって JavaScript のオブジェクトが文字列に変換されて送られる。
+API 側で `request.json()` を呼ぶと、その文字列を JavaScript のオブジェクトに戻せる。
+
+`await` が必要なのは、リクエストの本文はネットワーク越しに届くため非同期処理だから。
+読み込みが完了してから次の行に進むために `await` で待つ。
+
+---
+
 ## flatMap でネストした配列を平坦にする
 
 `availabilities` は日付ごとにスロットの配列を持つ入れ子構造。
@@ -120,6 +144,25 @@ useEffect(() => {
 **依存配列**に指定した値が変わるたびに処理が再実行される。
 `[selectedId]` と書くことで「名前が変わったとき」だけ実行される。
 
+### `!data || data.length === 0` の2つの条件
+
+```ts
+if (!data || data.length === 0) return;
+```
+
+2つの条件はそれぞれ別のケースを防いでいる。
+
+| 状況 | `data` の値 | 引っかかる条件 |
+|---|---|---|
+| 通信エラー | `null` | `!data` |
+| 未提出メンバー | `[]` | `data.length === 0` |
+| 提出済み | `[{ ... }]` | どちらも false → 処理を続ける |
+
+`!data` だけにすると → 空配列のとき後続の `for` ループが無駄に走る  
+`data.length === 0` だけにすると → `data` が `null` のとき `.length` でエラーになる（クラッシュ）
+
+---
+
 ### time_slot の変換
 
 Supabase の `time` 型は `"09:00:00"` という秒まで含む形式で返ってくる。
@@ -141,6 +184,49 @@ for (const row of data) {
 
 日付ごとにスロットを配列にまとめる処理。
 `if (!restored[date])` で「まだキーがなければ空配列を作る」という初期化。
+
+### for...of の構文
+
+```ts
+for (const row of data) {
+  // row を使った処理
+}
+```
+
+配列の要素を1つずつ取り出してループする構文。
+
+```ts
+// 1回目: row = { available_date: "2026-04-08", time_slot: "09:00:00" }
+// 2回目: row = { available_date: "2026-04-08", time_slot: "09:30:00" }
+// 3回目: row = { available_date: "2026-04-10", time_slot: "19:00:00" }
+```
+
+`map` と似ているが、戻り値を使わず `restored` への書き込みのような**副作用**を目的とするときは `for...of` が適している。
+
+---
+
+## e.target と e.target.value
+
+```tsx
+<select onChange={(e) => setSelectedId(e.target.value)}>
+  <option value="uuid-aaa">田中花子</option>
+</select>
+```
+
+`e.target` はユーザーが操作した DOM 要素、つまり `<select>` 要素そのもの。
+
+`e.target.value` は `<select>` が「今どれが選ばれているか」を持つプロパティで、
+選ばれている `<option>` の `value` と一致する。
+
+```
+<select>（.value = "uuid-aaa"）← e.target.value はここ
+  <option value="uuid-aaa">田中花子</option>  ← 選ばれている
+  <option value="uuid-bbb">鈴木太郎</option>
+</select>
+```
+
+`<select>` は選択が変わるたびに自分の `.value` を自動更新する。
+`<option>` の `value` を直接取りに行っているわけではない。
 
 ---
 

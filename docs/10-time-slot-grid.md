@@ -129,6 +129,44 @@ const [from, to] = startIdx <= endIdx
   : [endIdx, startIdx];  // 下→上にタップした場合
 ```
 
+### `availabilities[activeDate] ?? []` の意味
+
+```ts
+const currentSlots = availabilities[activeDate] ?? [];
+```
+
+`availabilities` は日付をキーにしたオブジェクト。`availabilities[activeDate]` でその日のスロット配列を取り出す。
+
+`??` は **Null 合体演算子**。左辺が `undefined` または `null` のとき、右辺の値を使う。
+
+```ts
+// この日付にまだスロットが選択されていない場合
+availabilities["2026-04-08"]  // → undefined（キーが存在しない）
+availabilities["2026-04-08"] ?? []  // → []（空配列にフォールバック）
+```
+
+その後の処理で `.includes()` や `.filter()` を呼ぶため、`undefined` のまま使うとエラーになる。`?? []` で必ず配列にしておく。
+
+---
+
+### `filter` による選択解除
+
+```ts
+[activeDate]: currentSlots.filter((s) => s !== slot),
+```
+
+`filter` は条件を満たす要素だけを残して新しい配列を作る。`s !== slot` は「タップされたスロット以外」という条件。
+
+```ts
+// 例: "10:00" をタップして解除する場合
+currentSlots            // → ["09:00", "09:30", "10:00"]
+.filter((s) => s !== "10:00")  // → ["09:00", "09:30"]
+```
+
+元の配列を直接変更せず、タップされたスロットを除いた**新しい配列**を作って state を更新する。
+
+---
+
 ### `[activeDate]` による動的キーの更新
 
 ```ts
