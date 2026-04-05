@@ -31,6 +31,7 @@ export default function GanttChart({ dateSlots, totalMembers }: Props) {
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth() + 1); // 1-indexed
   const [threshold, setThreshold] = useState(totalMembers);
+  const [showAllDates, setShowAllDates] = useState(true);
   const [tooltip, setTooltip] = useState<Tooltip | null>(null);
 
   // 表示中の月の全日付を生成する
@@ -41,6 +42,9 @@ export default function GanttChart({ dateSlots, totalMembers }: Props) {
     const date = `${monthStr}-${String(i + 1).padStart(2, "0")}`;
     return dateSlotsMap[date] ?? { date, slots: [] };
   });
+  const displayDates = showAllDates
+    ? allDatesInMonth
+    : allDatesInMonth.filter((d) => d.slots.some((s) => s.absences <= threshold));
 
   function prevMonth() {
     if (month === 1) { setYear((y) => y - 1); setMonth(12); }
@@ -79,6 +83,12 @@ export default function GanttChart({ dateSlots, totalMembers }: Props) {
             ))}
           </select>
           <span>まで表示</span>
+          <button
+            onClick={() => setShowAllDates((v) => !v)}
+            className="ml-2 text-xs text-gray-500 underline"
+          >
+            {showAllDates ? "候補日のみ表示" : "全日付表示"}
+          </button>
         </div>
       </div>
 
@@ -104,7 +114,7 @@ export default function GanttChart({ dateSlots, totalMembers }: Props) {
 
         {/* 日付ごとの行 */}
         <div className="flex flex-col mt-4">
-          {allDatesInMonth.map((dateRow) => {
+          {displayDates.map((dateRow) => {
               const day = dateRow.date.slice(8); // "2026-04-08" → "08"
               return (
                 <div key={dateRow.date} className="flex items-center border-b border-gray-100 py-1">
