@@ -17,7 +17,195 @@
 
 ---
 
+## force-dynamic とは
+
+```ts
+export const dynamic = "force-dynamic";
+```
+
+Next.js はデフォルトで、ページを**ビルド時に静的生成**しようとする。
+静的生成とは「あらかじめ HTML を作っておく」こと。
+
+しかし Supabase を使うページは、アクセスのたびに最新データを取得する必要がある。
+ビルド時に Supabase へ接続しに行くと接続がハングしてデプロイが失敗する。
+
+`force-dynamic` を設定すると「ユーザーがアクセスしたときにデータを取得する」動作になる。
+
+```
+デフォルト（静的生成）: ビルド時に HTML を作る → Supabase 接続がハングしてデプロイ失敗
+force-dynamic        : アクセス時にデータを取得 → 毎回最新のデータが表示される
+```
+
+---
+
+## 動的ルートとパラメータの受け取り方
+
+### 動的ルートとは
+
+フォルダ名が `[id]` のページは、URL の一部を変数として受け取れる。
+
+```
+/numbers/abc-123  → id = "abc-123"
+/numbers/xyz-456  → id = "xyz-456"
+```
+
+`/numbers/page.tsx`（固定URL）と違い、`[id]` は「何でも受け取る」ページ。
+
+---
+
+### params の受け取り方
+
+動的ルートのページは `params` を引数として受け取る。
+
+```tsx
+// 普通のページ（引数なし）
+export default async function Page() { ... }
+
+// 動的ルートのページ（params を受け取る）
+export default async function NumberDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) { ... }
+```
+
+`{ params, }` は**引数の分割代入**。関数に渡されるオブジェクトから `params` だけを取り出している。末尾の `,` はあってもなくても動作は同じ（フォーマッターが自動で付けることが多い）。
+
+`}:` の `}` が分割代入の終わり、`:` の後ろが型注釈。
+
+---
+
+### 分割代入とは
+
+オブジェクトから特定のキーだけを取り出して変数にする書き方。
+
+```ts
+// 普通の書き方
+const id = params.id;
+
+// 分割代入（同じ意味）
+const { id } = params;
+```
+
+関数の引数でも同様に使える。
+
+```tsx
+// 普通の書き方
+function Page(props) {
+  const params = props.params;
+}
+
+// 引数で分割代入（同じ意味）
+function Page({ params }) {
+  // params が直接使える
+}
+```
+
+---
+
+### ページコンポーネントが受け取れる引数
+
+Next.js のページコンポーネントには `params` の他に `searchParams` も渡される。
+
+```tsx
+// 受け取れるもの全部書くとこうなる
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string }>;
+}) { ... }
+```
+
+`searchParams` は URL の `?key=value` の部分（例: `/search?q=ダンス` の `q=ダンス`）。
+
+ページをリロードしても状態を保持したいときや、URLを共有したときに同じ表示にしたいときに使う。
+
+```
+// 用途の例
+/members?sort=name        → 名前順で並び替え
+/schedule?date=2026-04-08 → 特定の日付を開いた状態で共有
+/search?q=ダンス           → 検索キーワードをURLに含める
+```
+
+`useState` で管理する状態はリロードすると消えるが、`searchParams` に入れておくと URL を共有するだけで同じ状態を再現できる。
+
+普通のページでは両方不要なので全部省略できる。
+
+```tsx
+// params も searchParams も使わない場合は省略
+export default async function Page() { ... }
+```
+
+`[id]` のページだけ URL から id を取り出す必要があるため `params` を受け取っている。
+
+---
+
+### `await params` が必要な理由
+
+```ts
+const { id } = await params;
+```
+
+Next.js 15 以降、`params` が非同期（Promise）になった。以前は `params.id` で直接取れたが、今は `await` してから取り出す必要がある。
+
+```
+URL: /numbers/abc-123
+         ↓
+params = Promise<{ id: "abc-123" }>
+         ↓ await
+{ id: "abc-123" }
+         ↓ 分割代入
+id = "abc-123"
+```
+
+---
+
+## as any とは
+
+```ts
+number.number_members as any
+```
+
+TypeScript の**型キャスト**で、「この値の型チェックを無視する」という意味。
+
+`calculateCandidates` は `NumberMember[]` 型を期待しているが、Supabase が返す `number.number_members` の型推論では `members` が単一オブジェクトではなく配列として判定されてしまい、TypeScript がエラーを出す。
+
+```ts
+// calculateCandidates が期待する型
+members: { id: string; name: string }    // オブジェクト
+
+// Supabase の型推論が返す型
+members: { id: string; name: string }[]  // 配列（← TypeScript がエラーを出す）
+```
+
+実際のデータは正しくオブジェクトとして返ってくるが、TypeScript の型推論がズレているだけ。`as any` で型チェックを強制的に通過させている。
+
+`any` は「どんな型でも許容する」特殊な型。型安全性を犠牲にするため本来は避けるべきだが、Supabase の型推論と自前の型定義がズレているときの応急処置として使っている。
+
+---
+
 ## 候補日の計算ロジック（calculateCandidates.ts）
+
+### 関数の戻り値の型注釈
+
+```ts
+export function calculateCandidates(
+  availabilities: Availability[],
+  numberMembers: NumberMember[]
+): Candidate[] {
+```
+
+引数の型注釈は `引数名: 型` の形で書くが、戻り値の型注釈は `)` の後ろに `: 型` を書く。
+
+```ts
+function 関数名(引数: 型): 戻り値の型 { ... }
+```
+
+`): Candidate[]` は「この関数は `Candidate` の配列を返す」という意味。省略しても TypeScript が推論してくれるが、明示することで意図が伝わりやすくなる。
+
+---
 
 ### 全体の流れ
 
