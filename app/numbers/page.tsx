@@ -29,6 +29,11 @@ export default async function NumbersPage() {
 
   return (
     <main className="flex flex-col items-center min-h-screen gap-6 p-8">
+      <div className="w-full max-w-sm">
+        <Link href="/" className="text-sm text-gray-400 underline">
+          ← ホームに戻る
+        </Link>
+      </div>
       <h1 className="text-2xl font-bold">ナンバー一覧</h1>
       {performance && (
         <p className="text-gray-500">{performance.name}</p>
@@ -60,9 +65,6 @@ export default async function NumbersPage() {
         )}
       </div>
 
-      <Link href="/" className="text-sm text-gray-400 underline">
-        ← ホームに戻る
-      </Link>
     </main>
   );
 }

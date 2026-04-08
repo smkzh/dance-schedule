@@ -23,11 +23,13 @@ export default async function SubmitPage() {
 
   return (
     <main className="flex flex-col items-center min-h-screen gap-6 p-8">
+      <div className="w-full max-w-sm">
+        <Link href="/" className="text-sm text-gray-400 underline">
+          ← ホームに戻る
+        </Link>
+      </div>
       <h1 className="text-2xl font-bold">日程を提出する</h1>
       <NameSelector members={members ?? []} />
-      <Link href="/" className="text-sm text-gray-400 underline">
-        ← ホームに戻る
-      </Link>
     </main>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 
 // CSVのテキストを行ごとのオブジェクト配列に変換する
@@ -24,6 +24,10 @@ export default function AdminUploadPage() {
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [saveResult, setSaveResult] = useState<"success" | "error" | null>(null);
+  const [membersFileName, setMembersFileName] = useState("");
+  const [numbersFileName, setNumbersFileName] = useState("");
+  const membersInputRef = useRef<HTMLInputElement>(null);
+  const numbersInputRef = useRef<HTMLInputElement>(null);
 
   async function handlePreview(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -74,6 +78,11 @@ export default function AdminUploadPage() {
 
   return (
     <main className="flex flex-col items-center min-h-screen gap-8 p-8">
+      <div className="w-full max-w-md">
+        <Link href="/" className="text-sm text-gray-400 underline">
+          ← ホームに戻る
+        </Link>
+      </div>
       <h1 className="text-2xl font-bold">CSVアップロード</h1>
 
       <form onSubmit={handlePreview} className="flex flex-col gap-6 w-full max-w-md">
@@ -94,11 +103,20 @@ export default function AdminUploadPage() {
           <label className="font-medium">メンバー一覧CSV</label>
           <p className="text-sm text-gray-500">ヘッダー: member_name</p>
           <input
+            ref={membersInputRef}
             type="file"
             name="membersFile"
             accept=".csv"
-            className="text-sm text-gray-600"
+            className="hidden"
+            onChange={(e) => setMembersFileName(e.target.files?.[0]?.name ?? "")}
           />
+          <button
+            type="button"
+            onClick={() => membersInputRef.current?.click()}
+            className="h-11 rounded-lg border border-gray-300 text-sm text-gray-700 hover:bg-gray-50 transition-colors px-4 text-left"
+          >
+            {membersFileName || "ファイルを選択"}
+          </button>
         </div>
 
         {/* ナンバーと出演者CSV */}
@@ -106,11 +124,20 @@ export default function AdminUploadPage() {
           <label className="font-medium">ナンバーと出演者CSV</label>
           <p className="text-sm text-gray-500">ヘッダー: number_name, choreographer, member_name</p>
           <input
+            ref={numbersInputRef}
             type="file"
             name="numbersFile"
             accept=".csv"
-            className="text-sm text-gray-600"
+            className="hidden"
+            onChange={(e) => setNumbersFileName(e.target.files?.[0]?.name ?? "")}
           />
+          <button
+            type="button"
+            onClick={() => numbersInputRef.current?.click()}
+            className="h-11 rounded-lg border border-gray-300 text-sm text-gray-700 hover:bg-gray-50 transition-colors px-4 text-left"
+          >
+            {numbersFileName || "ファイルを選択"}
+          </button>
         </div>
 
         {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -192,9 +219,6 @@ export default function AdminUploadPage() {
         </div>
       )}
 
-      <Link href="/" className="text-sm text-gray-400 underline">
-        ← ホームに戻る
-      </Link>
     </main>
   );
 }
