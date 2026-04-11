@@ -10,20 +10,15 @@ type NumberMemberRow = {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    const circleId: string = body.circleId;
     const performanceName: string = body.performanceName;
     const memberNames: string[] = body.memberNames;
     const numberMembers: NumberMemberRow[] = body.numberMembers;
 
-    // 1. 既存の公演を非アクティブにする
-    await supabase
-      .from("performances")
-      .update({ is_active: false })
-      .eq("is_active", true);
-
-    // 2. 新しい公演を作成する
+    // 1. 新しい公演を作成する
     const { data: performance, error: perfError } = await supabase
       .from("performances")
-      .insert({ name: performanceName, is_active: true })
+      .insert({ name: performanceName, circle_id: circleId })
       .select("id")
       .single();
     if (perfError) throw perfError;
