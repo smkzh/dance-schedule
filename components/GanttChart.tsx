@@ -83,12 +83,14 @@ export default function GanttChart({ dateSlots, totalMembers }: Props) {
             ))}
           </select>
           <span>まで表示</span>
-          <button
-            onClick={() => setShowAllDates((v) => !v)}
-            className="ml-2 text-xs text-gray-500 underline"
-          >
-            {showAllDates ? "候補日のみ表示" : "全日付表示"}
-          </button>
+          <label className="ml-2 flex items-center gap-1 text-xs text-gray-500 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={!showAllDates}
+              onChange={() => setShowAllDates((v) => !v)}
+            />
+            候補日のみ表示
+          </label>
         </div>
       </div>
 
