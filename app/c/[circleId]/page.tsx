@@ -18,8 +18,8 @@ export default async function CircleHomePage({
     .order("name");
 
   return (
-    <main className="flex flex-col items-center min-h-screen gap-8 p-8">
-      <h1 className="text-2xl font-bold">公演一覧</h1>
+    <main className="flex flex-col items-center justify-center min-h-screen gap-8 p-8">
+      <h1 className="text-2xl font-bold">RehearsalPlanner</h1>
 
       <div className="flex flex-col gap-6 w-full max-w-sm">
         {performances && performances.length > 0 ? (

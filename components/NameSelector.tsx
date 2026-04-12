@@ -137,7 +137,7 @@ export default function NameSelector({ members }: Props) {
           {activeDate && (
             <div className="flex flex-col gap-2">
               <p className="font-medium">
-                {activeDate} の空き時間を選んでください
+                {new Date(activeDate + "T00:00:00").toLocaleDateString("ja-JP", { month: "long", day: "numeric" })} の空き時間を選んでください
               </p>
               {rangeStart ? (
                 <p className="text-sm text-gray-500">

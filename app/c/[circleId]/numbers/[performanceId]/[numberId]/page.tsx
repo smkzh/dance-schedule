@@ -59,10 +59,27 @@ export default async function NumberDetailPage({
         </Link>
       </div>
 
-      <div className="w-full max-w-4xl flex flex-col gap-1">
-        <h1 className="text-2xl font-bold">{number.name}</h1>
-        <p className="text-sm text-gray-500">振付: {choreographers.join("・")}</p>
-        <p className="text-sm text-gray-500">出演: {number.number_members.length}名</p>
+      <div className="w-full max-w-4xl flex justify-between items-start">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-2xl font-bold">{number.name}</h1>
+          <p className="text-sm text-gray-500">振付: {choreographers.join("・")}</p>
+          <p className="text-sm text-gray-500">出演: {number.number_members.length}名</p>
+        </div>
+        <div className="inline-flex flex-col gap-1 text-xs text-gray-500 mt-10">
+          <div className="flex items-center gap-1">
+            {[0, 0.25, 0.5, 0.75, 1].map((ratio) => (
+              <span
+                key={ratio}
+                className="inline-block w-4 h-4 rounded-sm"
+                style={{ backgroundColor: `hsl(0, 0%, ${Math.round(20 + ratio * 70)}%)` }}
+              />
+            ))}
+          </div>
+          <div className="flex justify-between w-24">
+            <span>欠席0</span>
+            <span>欠席多</span>
+          </div>
+        </div>
       </div>
 
       <div className="w-full max-w-4xl">
