@@ -115,50 +115,50 @@ export default function GanttChart({ dateSlots, totalMembers }: Props) {
         {/* 日付ごとの行 */}
         <div className="flex flex-col mt-4">
           {displayDates.map((dateRow) => {
-              const day = dateRow.date.slice(8); // "2026-04-08" → "08"
-              return (
-                <div key={dateRow.date} className="flex items-center border-b border-gray-100 py-1">
-                  {/* 日付ラベル */}
-                  <span className="w-16 text-sm text-gray-600 shrink-0">
-                    {parseInt(day)}日
-                  </span>
+            const day = dateRow.date.slice(8); // "2026-04-08" → "08"
+            return (
+              <div key={dateRow.date} className="flex items-center border-b border-gray-100 py-1">
+                {/* 日付ラベル */}
+                <span className="w-16 text-sm text-gray-600 shrink-0">
+                  {parseInt(day)}日
+                </span>
 
-                  {/* タイムライン */}
-                  <div className="relative flex-1 h-7">
-                    {dateRow.slots
-                      .filter((s) => s.absences <= threshold)
-                      .map((s) => {
-                        const idx = TIME_SLOTS.indexOf(s.slot);
-                        return (
-                          <div
-                            key={s.slot}
-                            className="absolute top-0 h-full cursor-default"
-                            style={{
-                              left: `${(idx / TIME_SLOTS.length) * 100}%`,
-                              width: `${slotWidth}%`,
-                              backgroundColor: absenceColor(s.absences, totalMembers),
-                            }}
-                            onMouseEnter={(e) => {
+                {/* タイムライン */}
+                <div className="relative flex-1 h-7">
+                  {dateRow.slots
+                    .filter((s) => s.absences <= threshold)
+                    .map((s) => {
+                      const idx = TIME_SLOTS.indexOf(s.slot);
+                      return (
+                        <div
+                          key={s.slot}
+                          className="absolute top-0 h-full cursor-default"
+                          style={{
+                            left: `${(idx / TIME_SLOTS.length) * 100}%`,
+                            width: `${slotWidth}%`,
+                            backgroundColor: absenceColor(s.absences, totalMembers),
+                          }}
+                          onMouseEnter={(e) => {
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            setTooltip({ slotInfo: s, x: rect.left, y: rect.top });
+                          }}
+                          onMouseLeave={() => setTooltip(null)}
+                          onClick={(e) => {
+                            // スマホ: タップでツールチップ表示/非表示
+                            if (tooltip?.slotInfo.slot === s.slot) {
+                              setTooltip(null);
+                            } else {
                               const rect = e.currentTarget.getBoundingClientRect();
                               setTooltip({ slotInfo: s, x: rect.left, y: rect.top });
-                            }}
-                            onMouseLeave={() => setTooltip(null)}
-                            onClick={(e) => {
-                              // スマホ: タップでツールチップ表示/非表示
-                              if (tooltip?.slotInfo.slot === s.slot) {
-                                setTooltip(null);
-                              } else {
-                                const rect = e.currentTarget.getBoundingClientRect();
-                                setTooltip({ slotInfo: s, x: rect.left, y: rect.top });
-                              }
-                            }}
-                          />
-                        );
-                      })}
-                  </div>
+                            }
+                          }}
+                        />
+                      );
+                    })}
                 </div>
-              );
-            })}
+              </div>
+            );
+          })}
         </div>
       </div>
 
