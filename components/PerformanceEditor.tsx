@@ -231,6 +231,7 @@ function NumberRowItem({
 }) {
   const [editName, setEditName] = useState(number.name);
   const [isEditing, setIsEditing] = useState(false);
+  const [isEditingChoreographer, setIsEditingChoreographer] = useState(false);
   const [addMemberId, setAddMemberId] = useState("");
 
   const castMemberIds = new Set(number.number_members.map((nm) => nm.member_id));
@@ -324,16 +325,23 @@ function NumberRowItem({
 
       {/* 出演者一覧 */}
       <div className="flex flex-col gap-1 pl-2">
-        {number.number_members.map((nm) => (
+        {[...number.number_members].sort((a, b) => a.member_id.localeCompare(b.member_id)).map((nm) => (
           <div key={nm.member_id} className="flex items-center gap-2 text-sm">
-            <label className="flex items-center gap-1 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={nm.is_choreographer}
-                onChange={() => handleToggleChoreographer(nm.member_id, nm.is_choreographer)}
-              />
-              <span className="text-gray-500 text-xs">振付</span>
-            </label>
+            <div className="w-10 flex items-center">
+              {isEditingChoreographer ? (
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={nm.is_choreographer}
+                    onChange={() => handleToggleChoreographer(nm.member_id, nm.is_choreographer)}
+                  />
+                </label>
+              ) : (
+                nm.is_choreographer && (
+                  <span className="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">振付</span>
+                )
+              )}
+            </div>
             <span className="flex-1">{nm.members.name}</span>
             <button
               onClick={() => handleRemoveCast(nm.member_id)}
@@ -343,6 +351,15 @@ function NumberRowItem({
             </button>
           </div>
         ))}
+      </div>
+      {/* 振付者変更ボタン */}
+      <div className="pl-2">
+        <button
+          onClick={() => setIsEditingChoreographer((v) => !v)}
+          className="text-xs text-gray-500 underline"
+        >
+          {isEditingChoreographer ? "振付者の変更を完了" : "振付者を変更"}
+        </button>
       </div>
 
       {/* 出演者追加 */}
