@@ -4,6 +4,8 @@
 
 **URL: https://dance-schedule-nine.vercel.app/**
 
+![トップページ](docs/screenshots/top-page.png)
+
 ---
 
 ## 制作背景
